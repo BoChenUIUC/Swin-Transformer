@@ -360,7 +360,7 @@ class PatchMerging(nn.Module):
         flops += (H // 2) * (W // 2) * 4 * (self.dim * ratio) * 2 * (self.dim * ratio)
         return flops
 
-
+import time
 class BasicLayer(nn.Module):
     """ A basic Swin Transformer layer for one stage.
 
@@ -591,12 +591,16 @@ class SwinTransformer(nn.Module):
             x = x + self.absolute_pos_embed
         x = self.pos_drop(x)
 
+        durations = []
         for layer in self.layers:
+            end = time.time()
             x = layer(x)
+            durations.append(time.time() - end)
 
         x = self.norm(x)  # B L C
         x = self.avgpool(x.transpose(1, 2))  # B C 1
         x = torch.flatten(x, 1)
+        print(durations)
         return x
 
     def forward(self, x):
