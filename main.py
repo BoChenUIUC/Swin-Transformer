@@ -93,7 +93,8 @@ def main(config):
     if hasattr(model, 'flops'):
         flops = model.flops()
         flops75 = model.flops(ratio=0.75)
-        logger.info(f"number of GFLOPs: {flops / 1e9} {flops75 / 1e9}")
+        flops25 = model.flops(ratio=0.25)
+        logger.info(f"number of GFLOPs: {flops / 1e9} {flops75 / 1e9} {flops25 / 1e9}")
         exit(0)
 
     model.cuda()
