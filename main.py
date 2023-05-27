@@ -94,7 +94,7 @@ def main(config):
         flops = model.flops()
         ratio_list = []
         for i in range(0,32):
-            ratio_list += model.flops(ratio=1-1.0*i/32)
+            ratio_list += [model.flops(ratio=1-1.0*i/32)]
         print(ratio_list)
         exit(0)
         logger.info(f"number of GFLOPs: {flops / 1e9}")
