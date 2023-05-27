@@ -92,10 +92,12 @@ def main(config):
     logger.info(f"number of params: {n_parameters}")
     if hasattr(model, 'flops'):
         flops = model.flops()
-        flops75 = model.flops(ratio=0.75)
-        flops5 = model.flops(ratio=0.5)
-        flops25 = model.flops(ratio=0.25)
-        logger.info(f"number of GFLOPs: {flops / 1e9} {flops75 / 1e9} {flops5 / 1e9} {flops25 / 1e9}")
+        ratio_list = []
+        for i in range(0,32):
+            ratio_list += model.flops(ratio=1-1.0*i/32)
+        print(ratio_list)
+        exit(0)
+        logger.info(f"number of GFLOPs: {flops / 1e9}")
 
     model.cuda()
     model_without_ddp = model
