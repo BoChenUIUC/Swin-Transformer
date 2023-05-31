@@ -593,6 +593,7 @@ class SwinTransformer(nn.Module):
 
         for layer in self.layers:
             x = layer(x)
+            print(x.size())
 
         x = self.norm(x)  # B L C
         x = self.avgpool(x.transpose(1, 2))  # B C 1
