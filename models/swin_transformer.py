@@ -593,8 +593,7 @@ class SwinTransformer(nn.Module):
 
         for i,layer in enumerate(self.layers):
             x = layer(x)
-            print(i,x.size())
-        exit(0)
+
         x = self.norm(x)  # B L C
         x = self.avgpool(x.transpose(1, 2))  # B C 1
         x = torch.flatten(x, 1)
@@ -605,11 +604,14 @@ class SwinTransformer(nn.Module):
         x = self.head(x)
         return x
 
-    def flops(self, ratio=1.0):
+    def flops(self, ratio=1.0, aggr=False):
         flops = 0
         flops += self.patch_embed.flops(ratio=ratio)
         for i, layer in enumerate(self.layers):
             flops += layer.flops(ratio=ratio)
         flops += (self.num_features * ratio) * self.patches_resolution[0] * self.patches_resolution[1] // (2 ** self.num_layers)
         flops += (self.num_features * ratio) * self.num_classes
+        print(self.patches_resolution)
+        if aggr:
+            flops += (256 + 512 + 1024 + 1024) * ratio * 1024 * self.patches_resolution[0] * self.patches_resolution[1]
         return flops
