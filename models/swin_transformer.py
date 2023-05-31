@@ -591,10 +591,10 @@ class SwinTransformer(nn.Module):
             x = x + self.absolute_pos_embed
         x = self.pos_drop(x)
 
-        for layer in self.layers:
+        for i,layer in enumerate(self.layers):
             x = layer(x)
-            print(x.size())
-
+            print(i,x.size())
+        exit(0)
         x = self.norm(x)  # B L C
         x = self.avgpool(x.transpose(1, 2))  # B C 1
         x = torch.flatten(x, 1)
