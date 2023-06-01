@@ -98,7 +98,7 @@ def main(config):
             if flops_ratio<0.5:break
         print(i,flops_ratio)
         for i in range(0,N):
-            flops,aggrratio = model.flops(ratio=1-1.0*i/N)
+            flops,aggrratio = model.flops(ratio=1-1.0*i/N,aggr=True)
             flops_ratio = flops/baseflops
             if flops_ratio<0.5:break
         print(i,flops_ratio,aggrratio)

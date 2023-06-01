@@ -611,7 +611,6 @@ class SwinTransformer(nn.Module):
             flops += layer.flops(ratio=ratio)
         flops += (self.num_features * ratio) * self.patches_resolution[0] * self.patches_resolution[1] // (2 ** self.num_layers)
         flops += (self.num_features * ratio) * self.num_classes
-        print(self.patches_resolution)
         aggrflops = 0
         if aggr:
             aggrflops = (256 + 512 + 1024 + 1024) * ratio**2 * 1024 * 49
