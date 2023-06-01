@@ -91,13 +91,19 @@ def main(config):
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     logger.info(f"number of params: {n_parameters}")
     if hasattr(model, 'flops'):
-        flops = model.flops()
-        # ratio_list = []
-        # for i in range(0,32):
-        #     ratio_list += [model.flops(ratio=1-1.0*i/32)]
-        # print(ratio_list)
+        baseflops = model.flops()
+        N = 32
+        for i in range(0,N):
+            flops_ratio = model.flops(ratio=1-1.0*i/N)/baseflops
+            if flops_ratio<0.5:break
+        print(i,flops_ratio)
+        for i in range(0,N):
+            flops,aggrratio = model.flops(ratio=1-1.0*i/N)
+            flops_ratio = flops/baseflops
+            if flops_ratio<0.5:break
+        print(i,flops_ratio,aggrratio)
         exit(0)
-        logger.info(f"number of GFLOPs: {flops / 1e9}")
+        logger.info(f"number of GFLOPs: {baseflops / 1e9}")
 
     model.cuda()
     model_without_ddp = model
